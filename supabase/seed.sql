@@ -1,0 +1,1 @@
+-- Catalog and app settings seed will be delivered with their database migrations.

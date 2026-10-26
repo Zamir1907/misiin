@@ -1,0 +1,16 @@
+/* Stage 12: responsive hardening, loaded last. */
+html{max-width:100%;overflow-x:clip}body{min-width:0;max-width:100%;overflow-x:clip}img,video,svg,canvas{max-width:100%;height:auto}pre,code{overflow-wrap:anywhere}pre{max-width:100%;overflow-x:auto}p,li,td,th,h1,h2,h3{overflow-wrap:break-word}main,section,article,aside,.card,.dash-card,.admin-card{min-width:0}input,select,textarea{max-width:100%;font-size:max(16px,1em)}button,a,input,select,textarea{touch-action:manipulation}button,[role=button],.button{min-height:44px}button:focus-visible,[role=button]:focus-visible,a:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #7a5dba;outline-offset:2px}
+/* [hidden] must win over flex/grid component display rules */
+[hidden]{display:none!important}
+@media(max-width:1024px){.dashboard-sidebar,.admin-side{overscroll-behavior:contain;overflow-y:auto}.dashboard-sidebar:not(.is-open),.admin-side:not(.open){visibility:hidden;pointer-events:none}.dashboard-sidebar.is-open,.admin-side.open{visibility:visible}.admin-area,.dashboard-main{width:100%;min-width:0}}
+@media(max-width:767px){.dashboard-content{padding-bottom:calc(95px + env(safe-area-inset-bottom))}.bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr));padding-bottom:max(7px,env(safe-area-inset-bottom))}.bottom-nav a{min-width:0;min-height:48px;overflow-wrap:anywhere}.dashboard-header,.admin-top{gap:8px}.admin-top #page-title{min-width:0;overflow-wrap:anywhere}.admin-top .button{padding:10px 12px}.admin-toolbar>*{max-width:100%}.admin-toolbar input,.admin-toolbar select{width:100%}.admin-table td{overflow-wrap:anywhere}.admin-actions>*{min-height:44px}.dash-list-item,.wallet-row{align-items:flex-start;flex-wrap:wrap}.settings-tabs{max-width:100%;overscroll-behavior-inline:contain}.support-bubble{min-width:0;max-width:100%}.dash-actions>*{max-width:100%}}
+@media(max-width:375px){.admin-grid{grid-template-columns:1fr}.dash-stats{grid-template-columns:1fr}.dash-stats .dash-card:first-child{grid-column:auto}.dashboard-content{padding-inline:12px}.dash-card{padding:14px}.public-hero h1{overflow-wrap:anywhere}.auth-card{padding:20px}.admin-top strong{font-size:12px}}
+@media(max-width:320px){.bottom-nav a{font-size:9px}.bottom-nav .dash-nav-icon{font-size:17px}.header-right .user-avatar{width:34px;height:34px}.admin-top{flex-wrap:wrap}.admin-top #page-title{order:3;flex-basis:100%}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Consolidated layout safeguards */
+html,body{max-width:100%;overflow-x:clip}
+.auth-shell,.auth-layout,.auth-page,.auth-container{box-sizing:border-box;max-width:100%;margin-inline:auto}
+.auth-card,.login-card,.register-card{box-sizing:border-box;max-width:min(100%,460px);margin-inline:auto}
+.sidebar,.app-sidebar,.dash-sidebar,.admin-sidebar{min-height:0;max-height:100dvh;overflow-y:auto;overscroll-behavior:contain}
+@media(max-width:767px){.auth-card,.login-card,.register-card{width:calc(100% - 24px)}.sidebar,.app-sidebar,.dash-sidebar,.admin-sidebar{max-height:100dvh}}

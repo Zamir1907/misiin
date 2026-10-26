@@ -1,0 +1,30 @@
+/* Stage 16: coherent, accessible admin palette. Loaded after existing CSS. */
+.admin-shell{background:var(--m-bg);color:var(--m-text);font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+.admin-side{background:var(--m-surface)!important;color:var(--m-text)!important;border-color:var(--m-border)!important}
+.admin-side small{color:var(--m-muted)!important;letter-spacing:.10em}
+.admin-side a{color:var(--m-text)!important;text-decoration:none}
+.admin-side nav button{color:var(--m-text)!important;background:transparent!important;font:700 13px/1.45 'Plus Jakarta Sans',system-ui,sans-serif;transition:background .15s,color .15s}
+.admin-side nav button:hover,.admin-side nav button[aria-current="page"]{background:var(--m-hover)!important;color:var(--m-text)!important}
+.admin-side nav button[aria-current="page"]{box-shadow:inset 3px 0 0 var(--m-accent)}
+.admin-top{background:var(--m-surface)!important;color:var(--m-text)!important;border-color:var(--m-border)!important;min-height:68px}
+.admin-card,.admin-table-wrap{background:var(--m-surface)!important;color:var(--m-text)!important;border:1px solid var(--m-border)!important;box-shadow:0 3px 18px #00000007}
+.admin-card h2,.admin-section h1,.admin-card .value{color:var(--m-text)!important}
+.admin-note,.admin-empty,.admin-table td:before{color:var(--m-muted)!important}
+.admin-table{color:var(--m-text)!important}
+.admin-table th{background:var(--m-hover)!important;color:var(--m-text)!important;border-color:var(--m-border)!important}
+.admin-table td{color:var(--m-text)!important;border-color:var(--m-border)!important}
+.admin-table tr{background:var(--m-surface)!important;border-color:var(--m-border)!important}
+.admin-actions button,.admin-toolbar button,.admin-form button:not(.button){background:var(--m-control)!important;color:var(--m-text)!important;border:1px solid var(--m-border)!important;font:600 13px/1.3 'Plus Jakarta Sans',system-ui,sans-serif}
+.admin-actions button:hover,.admin-toolbar button:hover{background:var(--m-hover)!important}
+.admin-form input,.admin-form textarea,.admin-form select,.admin-filter{background:var(--m-control)!important;color:var(--m-text)!important;border:1px solid var(--m-border)!important}
+.admin-form label{color:var(--m-text)!important}
+.admin-error{color:#bf3349!important}html[data-theme="dark"] .admin-error{color:#ff9ca9!important}
+.admin-success{color:#23653e!important}html[data-theme="dark"] .admin-success{color:#a9e3b9!important}
+.admin-section{max-width:1280px;margin:0 auto 24px}
+.admin-section h1{font-size:clamp(25px,3vw,34px);letter-spacing:-.025em;margin:4px 0 22px}
+.admin-grid{gap:16px}.admin-card{border-radius:18px}.admin-table-wrap{border-radius:16px}
+.admin-card .value{font-variant-numeric:tabular-nums}
+.admin-toolbar>*{max-width:100%}
+.admin-shell :focus-visible{outline:3px solid var(--m-accent);outline-offset:3px}
+@media(max-width:767px){.admin-top{min-height:60px}.admin-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:380px){.admin-grid{grid-template-columns:1fr}}

@@ -1,0 +1,2 @@
+-- Stage 1 policies are bundled with migrations/0001_foundation.sql.
+-- Do not execute duplicate policy definitions.

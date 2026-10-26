@@ -1,0 +1,14 @@
+{
+  "stage": 14,
+  "status": "not_production_ready",
+  "file_count_excluding_manifest": 112,
+  "migration_count": 9,
+  "documentation_files": [
+    "STAGE_14_DATABASE_CHECKLIST.md",
+    "STAGE_14_DEPLOYMENT.md",
+    "STAGE_14_FEATURE_STATUS.md",
+    "STAGE_14_QA_CHECKLIST.md",
+    "STAGE_14_START_HERE.md",
+    "STAGE_14_TROUBLESHOOTING.md"
+  ]
+}

@@ -1,0 +1,2 @@
+import {config,currentUser,supa,json,fail} from './_shared.js';
+export async function onRequestPost({request,env}){try{const cfg=config(env),user=await currentUser(request,cfg);const {order_id}=await request.json();if(!/^[0-9a-f-]{36}$/i.test(order_id||''))throw Error('Order ID tidak valid');const ip=request.headers.get('CF-Connecting-IP')||null;const order=await supa(cfg,'rpc/plus_record_user_confirmation',cfg.service,{p_user:user.id,p_order:order_id,p_ip:ip});return json({order,message:'Konfirmasi tercatat. Menunggu verifikasi pembayaran.'});}catch(e){return fail(e)}}

@@ -1,0 +1,17 @@
+import {getSupabase} from './supabase-client.js';
+const client=()=>getSupabase();
+export async function getMembership(userId){const s=await client();const {data,error}=await s.from('memberships').select('tier,status').eq('user_id',userId).maybeSingle();if(error)throw error;return data?.tier==='plus_lifetime'&&data.status==='active';}
+export async function listMissions({search='',category='',difficulty='',sort='newest',min=0,max=150000,page=0,size=12}={}){
+ const s=await client();let q=s.from('missions').select('id,title,category,difficulty,description,reward,duration_minutes,deadline,quota,plus_only,submission_type,created_at',{count:'exact'}).eq('status','published').gte('reward',min).lte('reward',max);
+ if(category)q=q.eq('category',category);if(difficulty)q=q.eq('difficulty',difficulty);
+ if(search)q=q.ilike('title',`%${search.replace(/[%_,]/g,'')}%`);
+ if(sort==='reward')q=q.order('reward',{ascending:false});else if(sort==='deadline')q=q.order('deadline',{ascending:true});else q=q.order('created_at',{ascending:false});
+ const {data,error,count}=await q.range(page*size,(page+1)*size-1);if(error)throw error;return {data:data||[],count:count||0};
+}
+export async function getMission(id){const s=await client();const {data,error}=await s.from('missions').select('*').eq('id',id).eq('status','published').single();if(error)throw error;return data;}
+export async function listClaims(userId){const s=await client();const {data,error}=await s.from('mission_claims').select('id,mission_id,status,claimed_at,missions(id,title,deadline,reward,submission_type),mission_submissions(answer,result_url,file_path,is_draft,updated_at)').eq('user_id',userId).order('claimed_at',{ascending:false});if(error)throw error;return data||[];}
+export async function claimMission(id){const s=await client();const {data,error}=await s.rpc('claim_mission',{p_mission:id});if(error)throw error;return data;}
+export async function saveAnswer(claimId,answer,url,path,submit=false){const s=await client();const {data,error}=await s.rpc('save_mission_answer',{p_claim:claimId,p_answer:answer,p_url:url||null,p_path:path||null,p_submit:submit});if(error)throw error;return data;}
+export async function getBookmarks(userId){const s=await client();const {data,error}=await s.from('bookmarks').select('mission_id').eq('user_id',userId);if(error)throw error;return new Set((data||[]).map(x=>x.mission_id));}
+export async function toggleBookmark(userId,missionId,has){const s=await client();const {error}=has?await s.from('bookmarks').delete().eq('user_id',userId).eq('mission_id',missionId):await s.from('bookmarks').insert({user_id:userId,mission_id:missionId});if(error)throw error;}
+export async function uploadEvidence(userId,claimId,file){if(file.size>5*1024*1024)throw Error('Ukuran maksimum 5 MB');if(!['image/png','image/jpeg','image/webp','application/pdf'].includes(file.type))throw Error('Format harus PNG, JPG, WebP, atau PDF');const s=await client();const ext={'image/png':'png','image/jpeg':'jpg','image/webp':'webp','application/pdf':'pdf'}[file.type];const path=`${userId}/${claimId}/${crypto.randomUUID()}.${ext}`;const {error}=await s.storage.from('mission-evidence').upload(path,file,{contentType:file.type,upsert:false});if(error)throw error;return path;}

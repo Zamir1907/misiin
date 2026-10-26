@@ -1,0 +1,12 @@
+/* Misiin 0015: consistent membership and improved readability */
+#home-membership{min-width:7.5rem;text-align:center}
+.support-heading{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.support-form{display:grid;gap:1rem;max-width:760px}
+.support-form label{display:grid;gap:.45rem;font-weight:600}
+.support-form input,.support-form select,.support-form textarea{width:100%;min-width:0;border:1px solid #d6c9bd;border-radius:12px;padding:.8rem;background:#fff;color:#302b2b;font:inherit}
+.support-form textarea{resize:vertical}
+.support-ticket{text-align:left;cursor:pointer}
+.support-error{color:#a52d39}
+.settings-tabs{display:flex;flex-wrap:wrap;gap:.5rem}
+.settings-tabs button{border-radius:12px}
+@media(max-width:640px){.support-heading{align-items:stretch}.support-heading .button{width:100%;text-align:center}}
