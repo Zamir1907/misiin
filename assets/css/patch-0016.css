@@ -1,0 +1,10 @@
+/* Misiin patch 0016: mission cards and support */
+.mission-card{border:1px solid #eadfd5;border-radius:22px;box-shadow:0 7px 22px rgba(48,43,43,.045);transition:transform .15s ease,box-shadow .15s ease}
+.mission-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(48,43,43,.085)}
+.mission-card h2{line-height:1.38;letter-spacing:-.025em}
+.mission-card .mission-reward,.mission-detail .mission-reward{display:flex;flex-direction:column;align-items:flex-start;gap:3px;background:#f1f7ed;border:1px solid #d5e6ce;padding:13px 15px;border-radius:15px}
+.mission-reward small{font-size:12px;font-weight:600;color:#556c4e}
+.mission-reward strong{font-size:clamp(23px,3vw,30px);font-weight:850;color:#246a42;letter-spacing:-.04em;line-height:1.1}
+.mission-card .mission-actions{margin-top:auto}.mission-card .mission-actions [data-detail]{flex:1}
+.support-wrap{max-width:1050px;margin:auto}.support-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.support-heading h1{margin:4px 0}.support-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:14px}.support-ticket{text-align:left;border:1px solid #e9ded5;border-radius:16px;background:#fff;padding:16px;cursor:pointer}.support-ticket:hover{border-color:#bd968f}.support-form{max-width:760px;display:grid;gap:16px}.support-form label{display:grid;gap:8px;font-weight:650}.support-form input,.support-form select,.support-form textarea{display:block;width:100%;min-width:0;border:1px solid #d9ccc5;border-radius:11px;padding:12px;background:#fff;color:#302b2b}.support-form textarea{resize:vertical}.support-form button[type=submit]{justify-self:start}.support-error{color:#a32d2d}.support-thread{display:grid;gap:12px}.support-bubble{background:#fff;border:1px solid #eee0d6;border-radius:15px;padding:14px;max-width:85%}.support-bubble.mine{background:#f2f8ed;justify-self:end}
+@media(max-width:640px){.support-form button[type=submit]{width:100%}.mission-card .mission-reward strong{font-size:26px}}
