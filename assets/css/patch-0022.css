@@ -1,0 +1,19 @@
+/* Patch 0022 — katalog tanpa tanggal dan kartu imbalan lebih menonjol */
+.mission-card{position:relative;isolation:isolate}
+.mission-card .mission-pay-strip,.mission-detail .mission-pay-strip{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:11px 13px;border:1px solid #e9d8de;border-radius:13px;background:linear-gradient(115deg,#fff2f6,#fff9f4)}
+.mission-pay-label{font-size:10px;font-weight:700;letter-spacing:.065em;text-transform:uppercase;color:#87566a}
+.mission-pay-amount{font-size:clamp(17px,2vw,23px);font-weight:850;letter-spacing:-.035em;line-height:1.2;color:#762a4e;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.mission-stock{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:650;color:#426e54}
+.mission-stock-dot{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#3a9563}
+.mission-card .mission-actions{margin-top:auto}
+.mission-card .mission-meta{gap:7px}
+.mission-pay-detail{max-width:440px}
+@media(max-width:767px){
+ .mission-card .mission-pay-strip{padding:8px 9px;border-radius:10px;gap:3px}
+ .mission-card .mission-pay-label{font-size:9px}
+ .mission-card .mission-pay-amount{font-size:clamp(14px,4vw,18px)}
+ .mission-card .mission-stock{font-size:10px;line-height:1.3}
+ .mission-card .mission-stock-dot{width:6px;height:6px;flex-basis:6px}
+ .mission-detail .mission-pay-strip{padding:12px}
+}
+@media(max-width:360px){.mission-card .mission-pay-amount{font-size:13px}}
