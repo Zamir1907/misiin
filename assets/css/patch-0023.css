@@ -1,0 +1,30 @@
+/* Patch 0023: perbaikan kartu misi dua kolom; tidak memengaruhi backend. */
+.mission-grid .mission-card{min-width:0;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.mission-grid .mission-card-top{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.mission-grid .mission-card-top .dash-pill.pink{margin-left:auto}
+.mission-grid .mission-category-icon{display:grid;place-items:center;flex:none;width:33px;height:33px;border-radius:11px;background:#f8e3ed;color:#873f65;font-size:22px;line-height:1}
+.mission-grid .mission-card h2{line-height:1.35}
+.mission-grid .mission-card .mission-pay-strip,.mission-detail .mission-pay-strip{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important;padding:12px 14px!important;border:1px solid #ead5df!important;border-radius:13px!important;background:linear-gradient(125deg,#fce7f0 0%,#fff5f2 100%)!important;min-width:0;box-sizing:border-box;width:100%;}
+.mission-grid .mission-card .mission-pay-label,.mission-detail .mission-pay-label{display:block!important;font-size:10px!important;font-weight:750!important;letter-spacing:.07em!important;text-transform:uppercase!important;color:#87516d!important;line-height:1.3!important}
+.mission-grid .mission-card .mission-pay-amount,.mission-detail .mission-pay-amount{display:block!important;font-size:clamp(18px,2.5vw,24px)!important;font-weight:850!important;letter-spacing:-.035em!important;line-height:1.2!important;color:#7b2c53!important;overflow-wrap:anywhere;white-space:normal}
+.mission-grid .mission-card .mission-stock{display:flex;align-items:center;gap:6px;color:#386e52;font-weight:650}
+.mission-grid .mission-card .mission-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mission-grid .mission-card .mission-actions{margin-top:auto;display:grid;grid-template-columns:minmax(0,1fr) 42px;gap:8px;width:100%}
+.mission-grid .mission-card .mission-actions .button{min-width:0;min-height:40px;padding:8px;font-size:12px;justify-content:center}
+@media(max-width:767px){
+ .mission-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .mission-grid .mission-card{padding:11px;gap:8px;border-radius:16px}
+ .mission-grid .mission-card-top{gap:5px}
+ .mission-grid .mission-category-icon{width:29px;height:29px;font-size:18px;border-radius:9px}
+ .mission-grid .mission-card-top .dash-pill{font-size:9px;padding:4px 6px}
+ .mission-grid .mission-card h2{font-size:14px;line-height:1.35}
+ .mission-grid .mission-card .mission-pay-strip{padding:10px!important;border-radius:11px!important;gap:4px!important}
+ .mission-grid .mission-card .mission-pay-label{font-size:9px!important}
+ .mission-grid .mission-card .mission-pay-amount{font-size:clamp(16px,4.2vw,20px)!important}
+ .mission-grid .mission-card .mission-stock,.mission-grid .mission-card .mission-meta{font-size:10px}
+ .mission-grid .mission-card .mission-actions{grid-template-columns:minmax(0,1fr) 35px;gap:5px}
+ .mission-grid .mission-card .mission-actions .button{min-height:36px;font-size:10px;padding:6px 3px}
+ .mission-filters{padding:11px;gap:8px}
+ .mission-filters>button[type=submit]{min-height:37px}
+}
+@media(max-width:360px){.mission-grid .mission-card{padding:8px;gap:6px}.mission-grid .mission-card h2{font-size:12px}.mission-grid .mission-card .mission-pay-amount{font-size:15px!important}.mission-grid .mission-category-icon{width:25px;height:25px}.mission-grid .mission-card-top .dash-pill{font-size:8px}}
