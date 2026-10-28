@@ -2,7 +2,7 @@ import {logoutAndGo} from './services/auth-session.js';
 import {loadDashboardIdentity,profileProgress} from './services/dashboard-service.js';
 import {saveProfile,validateProfile,usernameAvailable,USERNAME_RE,uploadProfileImage,signedProfileImage} from './services/profile-service.js';
 const $=s=>document.querySelector(s);const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const items=[['home','Beranda','⌂'],['missions','Cari Misi','⌕'],['my-missions','Misi Saya','▤'],['wallet','Dompet','◉'],['history','Riwayat','◷'],['plus','Misiin Plus','✦'],['notifications','Notifikasi','♧'],['support','Pusat Bantuan','?'],['profile','Profil','☺'],['settings','Pengaturan','⚙']];
+const items=[['home','Beranda','⌂'],['missions','Cari Misi','⌕'],['my-missions','Misi Saya','▤'],['wallet','Dompet','◉'],['history','Riwayat','◷'],['plus','Misiin Plus','✦'],['notifications','Notifikasi','♧'],['support','Pusat Bantuan','?'],['profile','Profil','<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 21v-2a7.5 7.5 0 0 1 15 0v2"/></svg>'],['settings','Pengaturan','⚙']];
 const mobileKeys=['home','missions','my-missions','wallet','profile'];let ctx;let usernameCheckSequence=0;let membershipStatus='Memuat…';
 function activePage(){const k=new URLSearchParams(location.search).get('page')||'home';return items.some(i=>i[0]===k)?k:'home';}
 function navLink([key,name,icon],page){return `<a class="dash-nav-link" href="/app.html?page=${key}" ${page===key?'aria-current="page"':''}><span class="dash-nav-icon" aria-hidden="true">${icon}</span><span>${name}</span></a>`;}
