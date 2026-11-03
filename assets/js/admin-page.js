@@ -77,11 +77,11 @@ function renderReviews(){
  const currentIds=current.map(r=>r.id);
  const allCurrentSelected=currentIds.length>0&&currentIds.every(id=>selected.has(id));
  const reviewRows=current.map(r=>{
-  const sub=byClaim.get(r.id),profile=profileById.get(r.user_id),mission=missionById.get(r.mission_id);
+  const sub=byClaim.get(r.id),profile=profileById.get(r.user_id),missionData=missionById.get(r.mission_id);
   const proof=`<div>${esc((sub?.answer||'').slice(0,500))}</div>${sub?.result_url?`<div><a href="${esc(sub.result_url)}" target="_blank" rel="noopener noreferrer">Buka tautan hasil</a></div>`:''}${sub?.file_path?`<div><small>File: ${esc(sub.file_path)}</small></div>`:''}<small>Dikirim: ${date(sub?.submitted_at)}</small>`;
   const identity=`<strong>${esc(profile?.display_name||'Nama belum tersedia')}</strong><br><small>@${esc(profile?.username||'tanpa-username')} · ${short(r.user_id)}</small>`;
-  const mission=`<strong>${esc(mission?.title||'Misi tidak ditemukan')}</strong><br><small>Reward: ${rup(mission?.reward)}</small>`;
-  return [`<input type="checkbox" aria-label="Pilih submission ${short(r.id)}" data-review-select="${esc(r.id)}" ${selected.has(r.id)?'checked':''}>`,identity,mission,proof,esc(r.status),`<div class="admin-actions">${btn('approve',r.id,'Setujui')}${btn('revision_requested',r.id,'Revisi')}${btn('rejected',r.id,'Tolak')}</div>`];
+  const missionCell=`<strong>${esc(missionData?.title||'Misi tidak ditemukan')}</strong><br><small>Reward: ${rup(missionData?.reward)}</small>`;
+  return [`<input type="checkbox" aria-label="Pilih submission ${short(r.id)}" data-review-select="${esc(r.id)}" ${selected.has(r.id)?'checked':''}>`,identity,missionCell,proof,esc(r.status),`<div class="admin-actions">${btn('approve',r.id,'Setujui')}${btn('revision_requested',r.id,'Revisi')}${btn('rejected',r.id,'Tolak')}</div>`];
  });
  const historyRows=history.slice(0,20).map(event=>{
   const claim=claimById.get(event.claim_id),sub=submissionById.get(event.submission_id),profile=profileById.get(claim?.user_id),mission=missionById.get(claim?.mission_id);
