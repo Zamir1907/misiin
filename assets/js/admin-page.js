@@ -11,6 +11,8 @@ const rup=v=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maxi
 const date=v=>v?new Date(v).toLocaleString('id-ID'):'—';
 function info(t,bad=false){status.textContent=t;status.className=bad?'admin-error':'admin-success';}
 async function query(table,cols='*',limit=40){let {data,error}=await db.from(table).select(cols).limit(limit);if(error)throw error;return data||[];}
+async function queryAll(table,cols='*',pageSize=1000){let out=[],from=0;while(true){const {data,error}=await db.from(table).select(cols).range(from,from+pageSize-1);if(error)throw error;const batch=data||[];out.push(...batch);if(batch.length<pageSize)break;from+=pageSize;}return out;}
+async function queryInChunks(table,cols,column,ids,chunkSize=100){const out=[];for(let i=0;i<ids.length;i+=chunkSize){const {data,error}=await db.from(table).select(cols).in(column,ids.slice(i,i+chunkSize));if(error)throw error;out.push(...(data||[]));}return out;}
 async function rpc(name,args){const {error,data}=await db.rpc(name,args);if(error)throw error;return data;}
 function table(headers,rows){return `<div class="admin-table-wrap"><table class="admin-table"><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(row=>`<tr>${row.map((c,i)=>`<td data-label="${esc(headers[i])}">${c}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${headers.length}" class="admin-empty">Belum ada data.</td></tr>`}</tbody></table></div>`;}
 const btn=(action,id,label)=>`<button data-action="${esc(action)}" data-id="${esc(id)}" type="button">${esc(label)}</button>`;
@@ -28,8 +30,30 @@ async function render(){info('Memuat data...');try{
  const rows=await query('missions','id,title,category,reward,quota,deadline,status,plus_only',100);
  page('Kelola Misi',`<div class="admin-toolbar">${btn('new-mission','','+ Tambah misi')}<span class="admin-note">CRUD tersimpan langsung ke Supabase dengan RLS admin dan audit trigger.</span></div>`+table(['Judul','Kategori','Imbalan','Status','Aksi'],rows.map(r=>[esc(r.title),esc(r.category),rup(r.reward),esc(r.status),`<div class="admin-actions">${btn('edit-mission',r.id,'Edit')} ${btn('duplicate-mission',r.id,'Duplikasi')} ${btn('archive-mission',r.id,'Arsip')}</div>`])));
  }else if(section==='reviews'){
- const claims=await query('mission_claims','id,mission_id,user_id,status,updated_at',100);const pending=claims.filter(r=>['submitted','in_review'].includes(r.status));const subs=await query('mission_submissions','id,claim_id,answer,result_url,file_path,is_draft',100);const byClaim=new Map(subs.map(s=>[s.claim_id,s]));
- page('Review Misi',table(['Claim','Jawaban & bukti','Status','Aksi'],pending.map(r=>{let s=byClaim.get(r.id);return[short(r.id),`<div>${esc((s?.answer||'').slice(0,300))}</div><div>${s?.result_url?`<a href="${esc(s.result_url)}" target="_blank" rel="noopener noreferrer">Tautan hasil</a>`:''}</div><small>${esc(s?.file_path||'')}</small>`,esc(r.status),`<div class="admin-actions">${btn('approve',r.id,'Setujui')}${btn('revision_requested',r.id,'Revisi')}${btn('rejected',r.id,'Tolak')}</div>`]})));
+  const [claims,missions,profiles]=await Promise.all([
+   queryAll('mission_claims','id,mission_id,user_id,status,claimed_at,updated_at'),
+   queryAll('missions','id,title,reward'),
+   queryAll('profiles','id,display_name,username')
+  ]);
+  const claimIds=claims.map(r=>r.id);
+  const subs=claimIds.length?await queryInChunks('mission_submissions','id,claim_id,user_id,answer,result_url,file_path,is_draft,submitted_at,updated_at','claim_id',claimIds):[];
+  const byClaim=new Map(subs.map(s=>[s.claim_id,s]));
+  const missionById=new Map(missions.map(m=>[m.id,m]));
+  const profileById=new Map(profiles.map(p=>[p.id,p]));
+  const pending=claims.filter(r=>['submitted','in_review'].includes(r.status)).filter(r=>{const s=byClaim.get(r.id);return s&&!s.is_draft;}).sort((a,b)=>new Date(byClaim.get(b.id)?.submitted_at||b.updated_at||0)-new Date(byClaim.get(a.id)?.submitted_at||a.updated_at||0));
+  const reviewed=claims.filter(r=>['approved','rejected','revision_requested'].includes(r.status)).sort((a,b)=>new Date(b.updated_at||0)-new Date(a.updated_at||0));
+  const reviewRows=(items,canReview)=>items.map(r=>{
+   const s=byClaim.get(r.id),p=profileById.get(r.user_id),m=missionById.get(r.mission_id);
+   const proof=`<div>${esc((s?.answer||'').slice(0,500))}</div>${s?.result_url?`<div><a href="${esc(s.result_url)}" target="_blank" rel="noopener noreferrer">Buka tautan hasil</a></div>`:''}${s?.file_path?`<div><small>File: ${esc(s.file_path)}</small></div>`:''}<small>Dikirim: ${date(s?.submitted_at)}</small>`;
+   const identity=`<strong>${esc(p?.display_name||'Nama belum tersedia')}</strong><br><small>@${esc(p?.username||'tanpa-username')} · ${short(r.user_id)}</small>`;
+   const mission=`<strong>${esc(m?.title||'Misi tidak ditemukan')}</strong><br><small>Reward: ${rup(m?.reward)}</small>`;
+   const actions=canReview?`<div class="admin-actions">${btn('approve',r.id,'Setujui')}${btn('revision_requested',r.id,'Revisi')}${btn('rejected',r.id,'Tolak')}</div>`:esc(r.status);
+   return [identity,mission,proof,esc(r.status),actions];
+  });
+  page('Review Misi',`<div class="admin-toolbar"><strong>Antrean: ${pending.length} · Riwayat: ${reviewed.length}</strong><span class="admin-note">Semua halaman data Supabase dimuat, tidak dibatasi 100 baris.</span></div>
+  <h2>Menunggu review</h2>${table(['Pengerja','Misi','Bukti pengerjaan','Status','Aksi'],reviewRows(pending,true))}
+  <h2>Riwayat keputusan</h2>${table(['Pengerja','Misi','Bukti pengerjaan','Status akhir','Riwayat'],reviewRows(reviewed,false))}
+  <p class="admin-note">Draft tidak masuk antrean. Submission lama yang masih tersimpan akan ditampilkan sesuai statusnya.</p>`);
  }else if(section==='payments'){
  const rows=await query('payment_orders','id,order_code,user_id,amount,status,user_confirmed_at,paid_at,created_at',100);
  page('Pembayaran',`<p class="admin-note">Konfirmasi pengguna bukan bukti lunas. Verifikasi harus melalui webhook gateway tepercaya. Tidak ada tombol paksa paid.</p>`+table(['Order','Pengguna','Nominal','Status','Konfirmasi pengguna','Lunas'],rows.map(r=>[esc(r.order_code),short(r.user_id),rup(r.amount),esc(r.status),date(r.user_confirmed_at),date(r.paid_at)])));
