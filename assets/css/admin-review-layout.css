@@ -1,0 +1,99 @@
+/* Misiin Admin: independent scrolling for sidebar and main content. */
+html, body { height: 100%; }
+body { overflow: hidden; }
+.admin-shell {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  grid-template-rows: minmax(0, 1fr);
+}
+.admin-side {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100dvh;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.admin-side nav { flex: 0 0 auto; }
+.admin-area {
+  height: 100dvh;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.admin-top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.admin-side, .admin-area {
+  scrollbar-width: thin;
+  scrollbar-color: #c9bcae transparent;
+}
+.admin-side::-webkit-scrollbar, .admin-area::-webkit-scrollbar { width: 8px; }
+.admin-side::-webkit-scrollbar-thumb, .admin-area::-webkit-scrollbar-thumb {
+  background: #c9bcae;
+  border: 2px solid transparent;
+  border-radius: 99px;
+  background-clip: padding-box;
+}
+.admin-side::-webkit-scrollbar-thumb:hover, .admin-area::-webkit-scrollbar-thumb:hover { background-color: #a99a89; }
+
+/* Review queue pagination and bulk actions. */
+.review-summary { justify-content: space-between; margin-bottom: 18px; }
+.review-summary label { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; }
+.review-summary .admin-filter { width: auto; min-width: 82px; }
+.review-bulk {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px;
+  margin: 12px 0;
+  border: 1px solid var(--m-border, #e9dfd1);
+  border-radius: 14px;
+  background: var(--m-surface, #fff);
+}
+.review-bulk > strong { white-space: nowrap; font-size: 13px; }
+.review-select-all { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; }
+.review-bulk input[type="checkbox"], .admin-table input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--m-accent, #d99bb4); cursor: pointer; }
+.review-bulk .admin-actions { margin-left: auto; }
+.review-bulk button:disabled, .review-pagination button:disabled { opacity: .45; cursor: not-allowed; }
+.review-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 2px 24px;
+  color: var(--m-muted, #716967);
+  font-size: 13px;
+}
+.review-pagination button { border: 1px solid var(--m-border, #ddd0c4); background: var(--m-control, #fff); color: inherit; border-radius: 9px; min-height: 40px; padding: 8px 12px; cursor: pointer; }
+.admin-section > h2 { margin: 24px 0 10px; font-size: 18px; }
+
+@media (max-width: 1024px) {
+  .admin-shell { height: 100dvh; }
+  .admin-side {
+    position: fixed;
+    inset: 0 auto 0 0;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .admin-area { height: 100dvh; }
+}
+@media (max-width: 767px) {
+  .review-bulk { align-items: flex-start; }
+  .review-bulk .admin-actions { width: 100%; margin-left: 0; }
+  .review-bulk .admin-actions button { flex: 1 1 calc(50% - 8px); }
+  .review-pagination { align-items: flex-start; }
+  .review-summary { align-items: flex-start; }
+}
